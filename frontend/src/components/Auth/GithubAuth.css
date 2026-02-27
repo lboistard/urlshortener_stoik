@@ -1,0 +1,35 @@
+#loggedOut {
+    width: 100%;
+}
+
+.btn-github {
+    background: var(--color-white);
+    color: var(--color-secondary);
+    border: 1.5px solid var(--color-grey50);
+    border-radius: 0.75rem;
+    font-weight: 400;
+    font-size: 0.88rem;
+    height: 3.25rem;
+    width: 100%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    transition: border-color 0.2s, background 0.2s;
+    font-family: 'Lazzer-Medium', sans-serif;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.btn-github:hover:not(:disabled) { border-color: var(--color-primary); }
+
+.btn-github:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.helper {
+    text-align:center;
+    color:#ccc;
+    font-size:0.73rem;
+    font-weight:300;
+    margin-top: 8px;
+}

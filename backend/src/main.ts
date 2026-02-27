@@ -2,7 +2,10 @@ import "dotenv/config";
 
 import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
-import { ConfigService } from "@nestjs/config";
+import { writeFileSync } from "fs";
+import { join } from "path";
+import session from "express-session";
+import passport from "passport";
 
 import { ValidationPipe } from "@nestjs/common";
 
@@ -11,16 +14,32 @@ import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());
-
-  const configService = app.get(ConfigService);
+  const frontendUrl = process.env.FRONTEND_URL;
 
   app.enableCors({
-    // eslint-disable-next-line
-    origin: configService.get("app.cors"),
+    origin: frontendUrl,
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   });
 
-  // Validation pipe
+  const sessionSecret =
+    process.env.SESSION_SECRET ?? "dev-secret-change-in-production";
+  app.use(
+    session({
+      secret: sessionSecret,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        httpOnly: true,
+        sameSite: "lax",
+      },
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -42,8 +61,16 @@ async function bootstrap() {
     )
     .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, documentFactory);
+  const document = SwaggerModule.createDocument(app, config);
+
+  // This is a way for me to type my frontend with the json api spec
+  if (process.env.GENERATE_OPENAPI === "1") {
+    const outputPath = join(process.cwd(), "openapi.json");
+    writeFileSync(outputPath, JSON.stringify(document, null, 2));
+    process.exit(0);
+  }
+
+  SwaggerModule.setup("docs", app, () => document);
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

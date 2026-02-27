@@ -1,0 +1,17 @@
+.punchline {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    color: var(--color-secondary);
+    line-height: 1.2;
+    font-style: italic;
+}
+
+.accent {
+    color: var(--color-primary);
+}
+
+.subtitle {
+    color:#aaa;
+    font-size:0.8rem;
+    margin-top:0.6rem;
+    font-weight:300;
+}

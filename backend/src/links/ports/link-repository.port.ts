@@ -1,4 +1,4 @@
-import type { Link } from "../../../generated/prisma/client";
+import type { Link, User } from "../../../generated/prisma/client";
 
 export interface LinkRepositoryPort {
   create(input: {
@@ -6,6 +6,9 @@ export interface LinkRepositoryPort {
     slug: string;
     targetUrl: string;
   }): Promise<Link>;
+  findBySlug(slug: string): Promise<Link | null>;
+  incrementClickCountBySlug(slug: string): Promise<void>;
+  getSlugs(user: User): Promise<Link[] | null>;
 }
 
 export const LINK_REPOSITORY = Symbol("LINK_REPOSITORY");

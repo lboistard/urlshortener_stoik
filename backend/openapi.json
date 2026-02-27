@@ -1,0 +1,222 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/links": {
+      "post": {
+        "operationId": "LinkController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLinkDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Link"
+        ]
+      }
+    },
+    "/links/{slug}": {
+      "get": {
+        "operationId": "LinkController_redirectBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns target URL as JSON when Accept includes application/json (e.g. Swagger)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "targetUrl": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "302": {
+            "description": "Redirects to the target URL (browser or non-JSON clients)",
+            "headers": {
+              "Location": {
+                "description": "Target URL",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Link"
+        ]
+      }
+    },
+    "/auth/github": {
+      "get": {
+        "operationId": "AuthController_github",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirects to GitHub"
+          }
+        },
+        "summary": "Start GitHub OAuth",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/github/callback": {
+      "get": {
+        "operationId": "AuthController_githubCallback",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirects to frontend after login"
+          }
+        },
+        "summary": "GitHub OAuth callback",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "AuthController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get current user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Url Shortener - Stoik",
+    "description": "API to shorten urls.",
+    "version": "0.1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateLinkDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL to shorten",
+            "example": "https://www.google.com",
+            "format": "url"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "LinkResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "clxx1234567890"
+          },
+          "slug": {
+            "type": "string",
+            "example": "abc12XYZ"
+          },
+          "targetUrl": {
+            "type": "string",
+            "example": "https://www.google.com"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "targetUrl"
+        ]
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "clxx1234567890"
+          },
+          "githubId": {
+            "type": "string",
+            "example": "12345"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe",
+            "nullable": true
+          },
+          "avatarUrl": {
+            "type": "string",
+            "example": "https://avatars.github.com/...",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "githubId",
+          "username",
+          "avatarUrl",
+          "createdAt"
+        ]
+      }
+    }
+  }
+}

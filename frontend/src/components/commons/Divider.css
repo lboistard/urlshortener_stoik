@@ -1,0 +1,15 @@
+.separator {
+    animation-delay:0.13s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ccc;
+    font-size: 0.75rem;
+}
+
+.separator::before, .separator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #ebebeb;
+}

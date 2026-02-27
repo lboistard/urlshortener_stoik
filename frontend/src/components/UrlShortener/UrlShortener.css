@@ -1,0 +1,42 @@
+.fade {
+    animation-delay:0.07s;
+    display:flex;
+    flex-direction:column;
+    gap:0.6rem;
+    margin: 16px;
+    width: 100%;
+}
+
+.url-input {
+    background: var(--color-white);
+    border: 1.5px solid var(--color-grey50);
+    border-radius: 0.75rem;
+    height: 3.25rem;
+    font-size: 0.88rem;
+    color: var(--color-secondary);
+    padding-left: 1.1rem;
+    transition: border-color 0.2s;
+    font-weight: 300;
+    box-shadow: none;
+    width: 100%;
+}
+
+.shorten-cta {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    font-size: 0.88rem;
+    height: 3.25rem;
+    width: 100%;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.shorten-cta:disabled {
+    background: var(--color-primary-disabled);
+    cursor: not-allowed;
+    opacity: 0.85;
+}
