@@ -1,16 +1,19 @@
 import { apiFetch } from "./client";
-import type { components } from "./schema"
+import type { components } from "./schema";
 
-export type User = components["schemas"]["UserDto"]
+type User = components["schemas"]["UserDto"];
 
-export async function getMe(): Promise<User | null> {
-  try {
-    return await apiFetch<User>("/auth/me");
-  } catch {
-    return null;
-  }
-}
+const getMe = async (): Promise<User | null> => {
+	try {
+		return await apiFetch<User>("/auth/me");
+	} catch {
+		return null;
+	}
+};
 
-export async function logout(): Promise<void> {
-  await apiFetch<void>("/auth/logout", { method: "POST" });
-}
+const logout = async (): Promise<void> => {
+	await apiFetch<void>("/auth/logout", { method: "POST" });
+};
+
+export { getMe, logout };
+export type { User };

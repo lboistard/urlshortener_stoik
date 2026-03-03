@@ -7,23 +7,28 @@ type AuthLoadingContextValue = {
 
 const AuthLoadingContext = createContext<AuthLoadingContextValue | null>(null);
 
-function AuthLoadingProvider({ children }: { children: ReactNode }) {
-  const [isAuthLoading, setAuthLoadingState] = useState(false);
-  const setAuthLoading = useCallback((loading: boolean) => setAuthLoadingState(loading), []);
+const AuthLoadingProvider = ({ children }: { children: ReactNode }) => {
+	const [isAuthLoading, setAuthLoadingState] = useState(false);
+	const setAuthLoading = useCallback(
+		(loading: boolean) => setAuthLoadingState(loading),
+		[],
+	);
 
-  return (
-    <AuthLoadingContext.Provider value={{ isAuthLoading, setAuthLoading }}>
-      {children}
-    </AuthLoadingContext.Provider>
-  );
-}
+	return (
+		<AuthLoadingContext.Provider value={{ isAuthLoading, setAuthLoading }}>
+			{children}
+		</AuthLoadingContext.Provider>
+	);
+};
 
-function useAuthLoading(): AuthLoadingContextValue {
-  const ctx = useContext(AuthLoadingContext);
-  if (!ctx) {
-    throw new Error("useAuthLoading must be used within AuthLoadingProvider");
-  }
-  return ctx;
-}
+const useAuthLoading = (): AuthLoadingContextValue => {
+	const ctx = useContext(AuthLoadingContext);
+	if (!ctx) {
+		throw new Error(
+			"useAuthLoading must be used within AuthLoadingProvider",
+		);
+	}
+	return ctx;
+};
 
 export { AuthLoadingProvider, useAuthLoading };

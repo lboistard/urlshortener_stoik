@@ -16,14 +16,16 @@ export interface LinkRow extends Link {
   clickCount?: number;
 }
 
-export async function createLink(url: string): Promise<Link> {
-  const body: CreateLinkBody = { url };
-  return apiFetch<Link>("/links", {
-    method: "POST",
-    body: JSON.stringify(body),
-  });
-}
+const createLink = async (url: string): Promise<Link> => {
+	const body: CreateLinkBody = { url };
+	return apiFetch<Link>("/links", {
+		method: "POST",
+		body: JSON.stringify(body),
+	});
+};
 
-export async function getLinks(): Promise<LinkRow[]> {
-  return apiFetch<LinkRow[]>("/links");
-}
+const getLinks = async (): Promise<LinkRow[]> => {
+	return apiFetch<LinkRow[]>("/links");
+};
+
+export { createLink, getLinks };

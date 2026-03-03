@@ -4,6 +4,7 @@ import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { type Request, type Response, type NextFunction } from "express";
 import session from "express-session";
 import passport from "passport";
 
@@ -11,9 +12,26 @@ import { ValidationPipe } from "@nestjs/common";
 
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
+import { PinoLogger, pinoLogger } from "./logger";
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter());
+const requestLog = (req: Request, res: Response, next: NextFunction) => {
+  const start = Date.now();
+  res.on("finish", () => {
+    pinoLogger.info({
+      method: req.method,
+      path: req.originalUrl ?? req.url,
+      status: res.statusCode,
+      ms: Date.now() - start,
+    });
+  });
+  next();
+};
+
+const bootstrap = async () => {
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(), {
+    logger: new PinoLogger(),
+  });
+  app.use(requestLog);
   const frontendUrl = process.env.FRONTEND_URL;
 
   app.enableCors({
@@ -75,5 +93,6 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
   app.enableShutdownHooks();
-}
+};
+
 bootstrap();
