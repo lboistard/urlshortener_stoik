@@ -6,7 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
 	plugins: [react(), tailwindcss()],
 	server: {
-		allowedHosts: ["wagner-provisions-piano-senators.trycloudflare.com"],
+		allowedHosts: [""],
 		proxy: {
 			"/auth": {
 				target: "http://localhost:3000",
